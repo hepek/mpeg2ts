@@ -30,8 +30,8 @@ impl<R: Read> TsPacketReader<R> {
 
     /// Replaces current stream with a new stream
     /// Make sure self.stream is consumed
-    pub fn append(self, stream: R) -> Self {
-        TsPacketReader { stream: stream, pids: self.pids }
+    pub fn append(&self, stream: R) -> Self {
+        TsPacketReader { stream: stream, pids: self.pids.clone() }
     }
     
     /// Returns a reference to the underlaying byte stream.
