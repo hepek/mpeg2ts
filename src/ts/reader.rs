@@ -28,6 +28,12 @@ impl<R: Read> TsPacketReader<R> {
         }
     }
 
+    /// Replaces current stream with a new stream
+    /// Make sure self.stream is consumed
+    pub fn append(self, stream: R) -> Self {
+        TsPacketReader { stream: stream, pids: self.pids }
+    }
+    
     /// Returns a reference to the underlaying byte stream.
     pub fn stream(&self) -> &R {
         &self.stream
@@ -69,7 +75,7 @@ impl<R: Read> ReadTsPacket for TsPacketReader<R> {
                     let null = track!(Null::read_from(&mut reader))?;
                     TsPayload::Null(null)
                 }
-                0x01...0x1F | 0x1FFB => {
+                0x01..=0x1F | 0x1FFB => {
                     // Unknown (unsupported) packets
                     let bytes = track!(Bytes::read_from(&mut reader))?;
                     TsPayload::Raw(bytes)
