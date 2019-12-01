@@ -28,12 +28,17 @@ impl<R: Read> TsPacketReader<R> {
         }
     }
 
-    /// Creates new reader with `stream`
-    pub fn continue_with(other: &TsPacketReader<R>, stream: R) -> Self {
+    /// create with pids
+    pub fn new_with_pids(stream: R, pids: HashMap<Pid, PidKind>) -> Self {
         TsPacketReader {
             stream,
-            pids: other.pids.clone(),
+            pids,
         }
+    }
+
+    /// Creates new reader with `stream`
+    pub fn pids(&self) -> HashMap<Pid, PidKind> {
+        self.pids.clone()
     }
     
     /// Returns a reference to the underlaying byte stream.
@@ -124,7 +129,7 @@ impl<R: Read> ReadTsPacket for TsPacketReader<R> {
 }
 
 #[derive(Debug, Clone)]
-enum PidKind {
+pub enum PidKind {
     Pmt,
     Pes,
 }
