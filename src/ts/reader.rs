@@ -28,10 +28,12 @@ impl<R: Read> TsPacketReader<R> {
         }
     }
 
-    /// Replaces current stream with a new stream
-    /// Make sure self.stream is consumed
-    pub fn continue_with(&mut self, stream: R) {
-        self.stream = stream;
+    /// Creates new reader with `stream`
+    pub fn continue_with(other: &TsPacketReader<R>, stream: R) -> Self {
+        TsPacketReader {
+            stream,
+            pids: other.pids.clone(),
+        }
     }
     
     /// Returns a reference to the underlaying byte stream.
