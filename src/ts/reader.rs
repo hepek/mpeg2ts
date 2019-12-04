@@ -33,6 +33,10 @@ impl<R: Read> TsPacketReader<R> {
         &self.stream
     }
 
+    /// Returns a mut reference to the underlaying byte stream.
+    pub fn stream_mut(&mut self) -> &mut R {
+        &mut self.stream
+    }
     /// Converts `TsPacketReader` into the underlaying byte stream `R`.
     pub fn into_stream(self) -> R {
         self.stream
